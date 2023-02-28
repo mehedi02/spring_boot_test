@@ -31,10 +31,10 @@ $ sudo docker run -d -p 8080:8080 -t spring-boot:1.0
 
 ## Access the kubeconfig content
 ```bash
-KUBECONFIG=$(az aks get-credentials --resource-group <resource-group-name> --name <cluster-name> --query 'kubeConfigContent' -o tsv)
+az aks get-credentials --resource-group <resource-group-name> --name <cluster-name> --file kubeconfig-ss
 ```
 
-set the **KUBECONFIG** in github secrets and use it in CI/CD pipeline
+set the **KUBECONFIG** in github secrets and its value will be the content inside the **kubeconfig-ss** file and use it in CI/CD pipeline
 
 ## Create Azure Credentials
 In github secrets create a variable **AZURECREDENTIALS** and the value will be
@@ -52,3 +52,12 @@ In github secrets create a variable **AZURECREDENTIALS** and the value will be
     "managementEndpointUrl": "https://management.core.windows.net/"
 }
 ```
+
+To create new service principal and to get the above json run below command
+```bash
+az ad sp create-for-rbac --name "myApp" --role contributor \
+                            --scopes /subscriptions/{subscription-id}/resourceGroups/{resource-group} \
+                            --sdk-auth
+```
+
+The above service principal in the scope of resource group, if you want to give the subscription level access ommit the **/resourceGroups/{resource-group}**

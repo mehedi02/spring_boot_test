@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: myapp
-          image: myregistry/myapp:latest
+          image: mehedi02/test_spring_boot:latest
           ports:
             - containerPort: 8080
           # env:
